@@ -1,12 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Param, Post } from '@nestjs/common';
 import { ParserService } from './parser.service';
 
-@Controller()
+@Controller('/parse/')
 export class ParserController {
-  constructor(private readonly parserService: ParserService) {}
+    constructor(private readonly parserService: ParserService) {}
 
-  @Get()
-  getHello(): string {
-    return this.parserService.getHello();
-  }
+    @Post('/movie/:id')
+    async parseMovie(@Param('id') id: number) {
+        return this.parserService.parseMovie(id);
+    }
 }
