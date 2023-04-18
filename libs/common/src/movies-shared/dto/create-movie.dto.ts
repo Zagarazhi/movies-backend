@@ -1,6 +1,7 @@
 import { IsString, IsNumber, IsEnum, IsBoolean, ValidateNested } from "class-validator";
 import { CreateGenreDto } from "./create-genre.dto";
 import { CreateCountryDto } from "./create-country.dto";
+import { CreateVideoDto } from "./create-video.dto";
 
 enum TypesEnum {
     'FILM', 'VIDEO', 'TV_SERIES', 'MINI_SERIES', 'TV_SHOW'
@@ -56,4 +57,8 @@ export class CreateMovieDto {
     countries: CreateCountryDto[];
     @ValidateNested({each: true})
     genres: CreateGenreDto[];
+    @ValidateNested({each: true})
+    videos: CreateVideoDto[];
+    @IsNumber({}, {each: true})
+    similarMoviesKinopoisk: number[];
 }

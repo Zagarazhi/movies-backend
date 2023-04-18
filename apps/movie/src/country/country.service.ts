@@ -20,12 +20,7 @@ export class CountryService {
                 where: { nameRu: dto.country },
                 defaults: { nameRu: dto.country },
             });
-        
-            if (!created) {
-                countries.push(country);
-            } else {
-                countries.push(country[0]);
-            }
+            countries.push(country);
         }
       
         return countries;

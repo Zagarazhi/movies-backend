@@ -1,6 +1,6 @@
 import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
 import { Movie } from "./movie.model";
-import { MovieCountry } from "../../../../apps/movie/src/country/movie-country.model";
+import { MovieCountry } from "./movie-country.model";
 
 // Интефейс, в котором записаны поля, необходимые для создания объекта класса
 interface CountryCreationAttrs {

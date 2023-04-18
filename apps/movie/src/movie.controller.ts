@@ -9,7 +9,7 @@ export class MovieController {
     constructor(private readonly movieService: MovieService) {}
 
     @MessagePattern({cmd: 'movie'})
-    async createMovie(data: CreateMovieDto) : Promise<Movie> {
+    async createMovie(data: CreateMovieDto) : Promise<void | Movie> {
         const result = await this.movieService.createMovie(data);
         return result;
     }

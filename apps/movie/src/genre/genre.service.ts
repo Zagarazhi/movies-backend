@@ -8,8 +8,8 @@ export class GenreService {
     constructor(@InjectModel(Genre) private genreRepository: typeof Genre) {}
 
     async createGenre(dto: CreateGenreDto) {
-        const country = await this.genreRepository.create({nameRu: dto.genre});
-        return country;
+        const genre = await this.genreRepository.create({nameRu: dto.genre});
+        return genre;
     }
 
     async createOrFindGenres(genreDtos: CreateGenreDto[]): Promise<Genre[]> {
@@ -20,14 +20,8 @@ export class GenreService {
                 where: { nameRu: dto.genre },
                 defaults: { nameRu: dto.genre },
             });
-        
-            if (!created) {
-                genres.push(genre);
-            } else {
-                genres.push(genre[0]);
-            }
+            genres.push(genre);
         }
-      
         return genres;
     }
 }

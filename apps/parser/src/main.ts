@@ -6,13 +6,17 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
     const app = await NestFactory.create(ParserModule);
+    const configService = app.get(ConfigService);
     app.connectMicroservice<MicroserviceOptions>(
         {
             transport: Transport.TCP,
+            options: {
+                host: configService.get('PARSER_HOST'),
+                port: configService.get('PARSER_PORT'),
+            }
         }
     );
     app.useGlobalPipes(new ValidationPipe());
-    const configService = app.get(ConfigService);
     await app.startAllMicroservices();
     await app.listen(configService.get("PARSER_PORT"));
     

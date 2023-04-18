@@ -1,6 +1,6 @@
 import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
 import { Movie } from "./movie.model";
-import { MovieGenre } from "../../../../apps/movie/src/genre/movie-genre.model";
+import { MovieGenre } from "./movie-genre.model";
 
 // Интефейс, в котором записаны поля, необходимые для создания объекта класса
 interface GenreCreationAttrs {

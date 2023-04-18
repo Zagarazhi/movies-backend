@@ -3,11 +3,10 @@ import { MovieController } from './movie.controller';
 import { MovieService } from './movie.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Movie, Country, Genre } from "@app/common";
+import { Movie, Country, Genre, MovieCountry, MovieGenre, Video, SimilarMovies } from "@app/common";
 import { CountryModule } from './country/country.module';
+import { VideoModule } from './video/video.module'
 import { GenreModule } from './genre/genre.module';
-import { MovieCountry } from './country/movie-country.model';
-import { MovieGenre } from './genre/movie-genre.model';
 
 @Module({
     imports: [
@@ -15,7 +14,7 @@ import { MovieGenre } from './genre/movie-genre.model';
             isGlobal: true,
             envFilePath: '.env',
         }),
-        SequelizeModule.forFeature([Movie, Country, MovieCountry, Genre, MovieGenre]),
+        SequelizeModule.forFeature([Movie, Country, MovieCountry, Genre, MovieGenre, Video, SimilarMovies]),
         SequelizeModule.forRootAsync({
             imports: [ConfigModule],
             useFactory: (configService: ConfigService) => ({
@@ -26,7 +25,7 @@ import { MovieGenre } from './genre/movie-genre.model';
                 username: configService.get("POSTGRES_MOVIES_USER"),
                 password: configService.get("POSTGRES_MOVIES_PASSWORD"),
                 database: configService.get("POSTGRES_MOVIES_DB"),
-                models: [Movie, Country, MovieCountry, Genre, MovieGenre],
+                models: [Movie, Country, MovieCountry, Genre, MovieGenre, Video, SimilarMovies],
                 
                 autoLoadModels: true,
             }),
@@ -34,6 +33,7 @@ import { MovieGenre } from './genre/movie-genre.model';
         }),
         CountryModule,
         GenreModule,
+        VideoModule,
     ],
     controllers: [MovieController],
     providers: [MovieService],
