@@ -1,46 +1,22 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from "@nestjs/microservices";
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-import { createWriteStream } from 'fs';
-import * as fs from 'fs';
-import { promisify } from 'util';
 import { CreateMovieDto, Movie } from '@app/common';
-import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ParserService {
 
     constructor(@Inject('MOVIE_SERVICE') private client: ClientProxy) {}
 
-    private async downloadImage(url: string, folderPath: string): Promise<string> {
-        const uniqueId = uuidv4();
-        const fileExtension = url.split('.').pop();
-        if (!fs.existsSync(folderPath)) {
-            fs.mkdirSync(folderPath, { recursive: true });
-        }
-        const fileName = `${uniqueId}.${fileExtension}`;
-        const filePath = `${folderPath}/${fileName}`;
-      
-        const response = await axios.get(url, { responseType: 'stream' });
-        if (response.status !== 200) {
-            throw new Error(`Failed to download image: ${response.status}`);
-        }
-      
-        await promisify(response.data.pipe.bind(response.data))(createWriteStream(filePath));
-      
-        return filePath;
-    }
-
-    private async createMovieDtoFromJson(json: any): Promise<CreateMovieDto> {
+    private async createMovieDtoFromJson(json: any, videos: any, posters: any, similar: any): Promise<CreateMovieDto> {
         const movieDto: CreateMovieDto = {
             kinopoiskId: json.kinopoiskId,
             nameRu: json.nameRu,
             nameEn: json.nameEn || json.nameOriginal,
-            posterUrl: json.posterUrl,// ? await this.downloadImage(json.posterUrl, '/static/posters') : null,
-            posterUrlPreview: json.posterUrlPreview,// ? await this.downloadImage(json.posterUrlPreview, '/static/posters') : null,
-            coverUrl: json.coverUrl,// ? await this.downloadImage(json.coverUrl, '/static/covers') : null,
-            logoUrl: json.logoUrl,// ? await this.downloadImage(json.logoUrl, '/static/logos') : null,
+            posterUrl: posters ? posters[0].imageUrl : null,
+            posterUrlPreview: posters ? posters[0].previewUrl : null,
+            coverUrl: json.coverUrl,
+            logoUrl: json.logoUrl,
             ratingKinopoisk: json.ratingKinopoisk,
             ratingKinopoiskVoteCount: json.ratingKinopoiskVoteCount,
             year: json.year,
@@ -57,19 +33,24 @@ export class ParserService {
             shortFilm: json.shortFilm,
             completed: json.completed,
             countries: json.countries.map((c: any) => ({ country: c.country })),
-            genres: json.genres.map((g: any) => ({ genre: g.genre }))
+            genres: json.genres.map((g: any) => ({ genre: g.genre })),
+            videos: videos.items,
+            similarMoviesKinopoisk: similar.map((m: any) => m.filmId),
         };
         
         return movieDto;
     }
 
     async parseMovie(id: number) {
-        const headers = { 'X-API-KEY': '63cf78a3-b097-46c9-a3d2-4e33a123727a' };
+        const headers = { 'X-API-KEY': process.env.API_KINOPOISK };
         const config = { headers };
         const response = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}`, config);
-        const payload = await this.createMovieDtoFromJson(response.data);
+        const videos = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/videos`, config);
+        const posters = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/images?type=POSTER&page=1`, config);
+        const similar = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/similars`, config);
+        const payload = await this.createMovieDtoFromJson(response.data, videos.data, posters.data.items, similar.data.items);
         const pattern = { cmd: 'movie' };
-        const result = await lastValueFrom(this.client.send<Movie>(pattern, payload));
+        const result = this.client.send<void | Movie>(pattern, payload);
         return result;
     }
 }

@@ -1,24 +1,23 @@
 import { NestFactory } from '@nestjs/core';
-import { ParserModule } from './parser.module';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
-import { ValidationPipe } from '@nestjs/common';
+import { InfoModule } from './info.module';
 import { ConfigService } from '@nestjs/config';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-    const app = await NestFactory.create(ParserModule);
+    const app = await NestFactory.create(InfoModule);
     const configService = app.get(ConfigService);
     app.connectMicroservice<MicroserviceOptions>(
         {
             transport: Transport.TCP,
             options: {
-                host: configService.get('PARSER_HOST'),
-                port: configService.get('PARSER_PORT'),
+                host: configService.get('INFO_HOST'),
+                port: configService.get('INFO_PORT'),
             }
         }
     );
     app.useGlobalPipes(new ValidationPipe());
     await app.startAllMicroservices();
-    await app.listen(configService.get("PARSER_PORT"));
-    
+    await app.listen(configService.get("INFO_PORT"));
 }
 bootstrap();

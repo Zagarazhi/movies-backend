@@ -3,7 +3,7 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import { Country } from "@app/common";
 import { CountryController } from "./country.controller";
 import { CountryService } from "./country.service";
-import { MovieCountry } from "./movie-country.model";
+import { MovieCountry } from "@app/common";
 import { Movie } from "@app/common";
 
 @Module({

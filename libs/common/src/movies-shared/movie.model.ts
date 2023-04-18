@@ -1,8 +1,10 @@
-import { BelongsToMany, Column, DataType, Model, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { Country } from "./country.model";
-import { MovieCountry } from "../../../../apps/movie/src/country/movie-country.model";
+import { MovieCountry } from "./movie-country.model";
 import { Genre } from "./genre.model";
-import { MovieGenre } from "../../../../apps/movie/src/genre/movie-genre.model";
+import { MovieGenre } from "./movie-genre.model";
+import { Video } from "./video.model";
+import { SimilarMovies } from "./similar-movies";
 
 // Интефейс, в котором записаны поля, необходимые для создания объекта класса
 interface MovieCreationAttrs {
@@ -30,6 +32,8 @@ interface MovieCreationAttrs {
     completed: boolean;
     countries: number[];
     genres: number[];
+    similarMoviesKinopoisk: number[];
+    similarMovies: number[];
 }
 
 // Модель для работы с таблицей фильмов
@@ -44,11 +48,11 @@ export class Movie extends Model<Movie, MovieCreationAttrs> {
     kinopoiskId: number;
 
     // Колонка названия фильма на русском, которая должна быть уникальной и не пустой
-    @Column({type: DataType.STRING, unique: true, allowNull: false})
+    @Column({type: DataType.STRING, allowNull: false})
     nameRu: string;
 
-    // Колонка названия фильма на английском, которая должна быть уникальной
-    @Column({type: DataType.STRING, unique: true})
+    // Колонка названия фильма на английском
+    @Column({type: DataType.STRING})
     nameEn: string;
 
     @Column({type: DataType.STRING})
@@ -78,10 +82,10 @@ export class Movie extends Model<Movie, MovieCreationAttrs> {
     @Column({type: DataType.STRING})
     slogan: string;
 
-    @Column({type: DataType.STRING})
+    @Column({type: DataType.TEXT})
     description: string;
 
-    @Column({type: DataType.STRING})
+    @Column({type: DataType.TEXT})
     shortDescription: string;
 
     @Column({type: DataType.ENUM('FILM', 'VIDEO', 'TV_SERIES', 'MINI_SERIES', 'TV_SHOW')})
@@ -114,5 +118,17 @@ export class Movie extends Model<Movie, MovieCreationAttrs> {
 
     // Связь многие ко многие с жанрами
     @BelongsToMany(() => Genre, () => MovieGenre)
-    genries: Genre[];
+    genres: Genre[];
+
+    // Связь с видео
+    @HasMany(() => Video)
+    videos: Video[];
+
+    // Похожие фильмы по id Кинопоиска
+    @Column(DataType.ARRAY(DataType.INTEGER))
+    similarMoviesKinopoisk: number[];
+
+    // Связь многие ко многие с другими фильмами
+    @BelongsToMany(() => Movie, () => SimilarMovies, 'movieId', 'similarTo')
+    similarMovies: Movie[];
 }

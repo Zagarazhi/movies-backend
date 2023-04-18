@@ -1,12 +1,9 @@
 import { Module } from '@nestjs/common';
-import { MovieController } from './movie.controller';
-import { MovieService } from './movie.service';
+import { InfoController } from './info.controller';
+import { InfoService } from './info.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Movie, Country, Genre, MovieCountry, MovieGenre, Video, SimilarMovies } from "@app/common";
-import { CountryModule } from './country/country.module';
-import { VideoModule } from './video/video.module'
-import { GenreModule } from './genre/genre.module';
+import { Country, Genre, Movie, MovieCountry, MovieGenre, SimilarMovies, Video } from '@app/common';
 
 @Module({
     imports: [
@@ -31,11 +28,8 @@ import { GenreModule } from './genre/genre.module';
             }),
             inject: [ConfigService],
         }),
-        CountryModule,
-        GenreModule,
-        VideoModule,
     ],
-    controllers: [MovieController],
-    providers: [MovieService],
+    controllers: [InfoController],
+    providers: [InfoService],
 })
-export class MovieModule {}
+export class InfoModule {}

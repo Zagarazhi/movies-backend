@@ -17,6 +17,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                     transport: Transport.TCP,
                     options: {
                         port: configService.get('MOVIES_PORT'),
+                        host: configService.get('MOVIES_HOST'),
                     },
                 }),
                 inject: [ConfigService],
@@ -25,5 +26,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ],
     controllers: [ParserController],
     providers: [ParserService],
+    exports: [ClientsModule],
 })
 export class ParserModule {}

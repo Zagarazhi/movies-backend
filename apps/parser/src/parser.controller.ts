@@ -1,4 +1,4 @@
-import { Controller, Param, Post } from '@nestjs/common';
+import { Controller, HttpException, HttpStatus, Param, Post } from '@nestjs/common';
 import { ParserService } from './parser.service';
 
 @Controller('/parse/')
