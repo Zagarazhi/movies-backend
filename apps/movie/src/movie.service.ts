@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Movie } from "@app/common";
+import { Movie, MovieCountry, MovieGenre } from "@app/common";
 import { CountryService } from './country/country.service';
 import { GenreService } from './genre/genre.service';
 import { CreateMovieDto } from "@app/common";
@@ -38,6 +38,19 @@ export class MovieService {
             movie = await this.movieRepository.create({...dto, countries, genres});
         } else {
             return movie;
+        }
+
+        for (const countryId of countries) {
+            await MovieCountry.create({
+                movieId: movie.id,
+                countryId,
+            });
+        }
+        for (const genreId of genres) {
+            await MovieGenre.create({
+                movieId: movie.id,
+                genreId,
+            });
         }
     
         for (const similarMovie of similarMoviesResult) {

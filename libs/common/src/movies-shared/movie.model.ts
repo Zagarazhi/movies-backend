@@ -118,7 +118,7 @@ export class Movie extends Model<Movie, MovieCreationAttrs> {
 
     // Связь многие ко многие с жанрами
     @BelongsToMany(() => Genre, () => MovieGenre)
-    genries: Genre[];
+    genres: Genre[];
 
     // Связь с видео
     @HasMany(() => Video)
