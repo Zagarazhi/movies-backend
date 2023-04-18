@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-import { ParserModule } from './parser.module';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
-import { ValidationPipe } from '@nestjs/common';
+import { MovieModule } from './movie.module';
 import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-    const app = await NestFactory.create(ParserModule);
+    const app = await NestFactory.create(MovieModule);
     app.connectMicroservice<MicroserviceOptions>(
         {
             transport: Transport.TCP,
@@ -13,8 +13,6 @@ async function bootstrap() {
     );
     app.useGlobalPipes(new ValidationPipe());
     const configService = app.get(ConfigService);
-    await app.startAllMicroservices();
-    await app.listen(configService.get("PARSER_PORT"));
-    
+    await app.listen(configService.get("MOVIES_PORT"));
 }
 bootstrap();
