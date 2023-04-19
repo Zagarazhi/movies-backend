@@ -3,7 +3,7 @@
 
 # Запуск
 Для старта заполните [конфигурационный файл](.env). После этого запустите решение:
-- Микросервис фильмов: npm run start:dev movies
+- Микросервис фильмов: npm run start:dev movie
 - Микросервис информации: npm run start:dev info
 - Микросервис парсера: npm run start:dev parser
 
