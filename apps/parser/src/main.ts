@@ -16,6 +16,12 @@ async function bootstrap() {
             }
         }
     );
+    app.enableCors({
+        origin: "*",
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+        preflightContinue: false,
+        optionsSuccessStatus: 204
+    });
     app.useGlobalPipes(new ValidationPipe());
     await app.startAllMicroservices();
     await app.listen(configService.get("PARSER_PORT"));
