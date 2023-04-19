@@ -34,13 +34,7 @@ export class InfoService {
             limit,
             order,
             distinct: true,
-            where: {
-                [Op.and]: [
-                    filters,
-                    // { '$countries.id$': { [Op.in]: countries } },
-                    // { '$genres.id$': { [Op.in]: genres } },
-                ],
-            },
+            where: filters,
             include: [
                 { 
                     model: this.genreModel,
