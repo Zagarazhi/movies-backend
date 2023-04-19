@@ -4,7 +4,7 @@ import { MessagePattern } from "@nestjs/microservices";
 import { Country } from "@app/common";
 import { CreateCountryDto } from "@app/common";
 
-@Controller('/movies/countries')
+@Controller('/movies')
 export class CountryController {
     constructor(private countryService: CountryService) {}
 

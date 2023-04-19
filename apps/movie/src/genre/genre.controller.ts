@@ -4,7 +4,7 @@ import { Genre } from "@app/common";
 import { CreateGenreDto } from "@app/common";
 import { GenreService } from "./genre.service";
 
-@Controller('/movies/genries')
+@Controller('/movies')
 export class GenreController {
     constructor(private genreService: GenreService) {}
 

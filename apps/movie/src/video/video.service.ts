@@ -17,4 +17,9 @@ export class VideoService {
 
         return videos;
     }
+
+    async getAllByMovieId(movieId: number) {
+        const result = await this.videoRepository.findAll({where: {movieId}})
+        return result;
+    }
 }
