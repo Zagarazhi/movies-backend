@@ -11,15 +11,15 @@
 ## movie
 - GET "MOVIES_PORT"/movies/:id - получение информации по конкретному фильму
 - GET "MOVIES_PORT"/movies/:id/videos - получение видео по фильму
-- GET "MOVIES_PORT"/movies/:id/similar - получение массива похожих фильмов
+- GET "MOVIES_PORT"/movies/:id/similar - получение массива похожих фильмов  
 Пример: localhost:3001/movies/1
 
 ## parser
-- POST "PARSER_PORT"/parse/movie/:kinopoiskId - парсинг фильма с кинопоиска
+- POST "PARSER_PORT"/parse/movie/:kinopoiskId - парсинг фильма с кинопоиска  
 Можете не запускать этот микросервис, все остальные микросервисы работают без него
 
 ## info
-- GET "INFO_PORT"/info - получение списка фильмов
+- GET "INFO_PORT"/info - получение списка фильмов  
 Пример: localhost:3003/info?countries=1,2&genres=1,2&order=year-ASC&type=FILM&page=2&limit=1&minRating=5.5&numRatings=100000
 - countries=1,2 - фильтр по странам 1,2
 - genres=1,2 - фильтр по жанрам 1, 2
