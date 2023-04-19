@@ -11,7 +11,7 @@ export class InfoController {
     async findAll(
         @Query('page') page = 1,
         @Query('limit') limit = 10,
-        @Query('order') order = 'id',
+        @Query('order') order = 'id-ASC',
         @Query('genres') genres: string,
         @Query('countries') countries: string,
         @Query('type') type: string,
@@ -20,15 +20,17 @@ export class InfoController {
     ): Promise<{rows: Movie[], count: number}> {
         const filters: Record<string, any> = {};
 
-        /*
-        if (genres) {
-            filters['$genres.id$'] = { [Op.in]: genres.split(',') };
+        const genreIds = genres ? genres.split(',').map(g => +g).filter(g => !isNaN(g)) : [];
+        const countryIds = countries ? countries.split(',').map(c => +c).filter(c => !isNaN(c)) : [];
+        if(!page) {
+            page = 1;
         }
-        if (countries) {
-            filters['$countries.id$'] = { [Op.in]: countries.split(',') };
-        }*/
-        const genreIds = genres ? genres.split(',').map(g => +g) : [];
-        const countryIds = countries ? countries.split(',').map(c => +c) : [];
+        if(!limit) {
+            limit = 10;
+        }
+        if(!order) {
+            order = 'id-ASC'
+        }
         if (type) {
             filters.type = type;
         }

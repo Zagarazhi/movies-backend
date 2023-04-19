@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Movie, MovieCountry, MovieGenre } from "@app/common";
+import { Country, Genre, Movie, MovieCountry, MovieGenre } from "@app/common";
 import { CountryService } from './country/country.service';
 import { GenreService } from './genre/genre.service';
 import { CreateMovieDto } from "@app/common";
@@ -75,7 +75,27 @@ export class MovieService {
     }
 
     async getMovieById(id: number) {
-        const movie = await this.movieRepository.findByPk(id, {attributes: {exclude: ['similarMoviesKinopoisk', 'createdAt', 'updatedAt']}});
+        const movie = await this.movieRepository.findByPk(
+            id, 
+            {
+                attributes: {
+                    exclude: 
+                        ['similarMoviesKinopoisk', 'createdAt', 'updatedAt']
+                },
+                include: [
+                    {
+                        model: Genre,
+                        attributes: ['id', 'nameRu', 'nameEn'],
+                        through: { attributes: [] },
+                    },
+                    {
+                        model: Country,
+                        attributes: ['id', 'nameRu', 'nameEn'],
+                        through: { attributes: [] },
+                    },
+                ],
+            }
+        );
         return movie; 
     }
 
