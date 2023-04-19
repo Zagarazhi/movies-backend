@@ -23,7 +23,7 @@ export class InfoService {
         genres: number[],
         countries: number[],
         filters: Record<string, any>,
-    ): Promise<Movie[]> {
+    ): Promise<{rows: Movie[], count: number}> {
         const offset = (page - 1) * limit;
         const order = sort.split(',').map((field) => {
             const [name, dist] = field.split('-');
@@ -33,6 +33,7 @@ export class InfoService {
             offset,
             limit,
             order,
+            distinct: true,
             where: {
                 [Op.and]: [
                     filters,
@@ -71,6 +72,6 @@ export class InfoService {
                 'posterUrlPreview',
             ],
         };
-        return this.movieModel.findAll(options);
+        return this.movieModel.findAndCountAll(options);
     }
 }

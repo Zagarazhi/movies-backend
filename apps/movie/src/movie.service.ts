@@ -73,4 +73,33 @@ export class MovieService {
     
         return movie;
     }
+
+    async getMovieById(id: number) {
+        const movie = await this.movieRepository.findByPk(id, {attributes: {exclude: ['similarMoviesKinopoisk', 'createdAt', 'updatedAt']}});
+        return movie; 
+    }
+
+    async getSimilarByMovieID(id: number) {
+        const movies = await this.movieRepository.findAll({
+            where: {id}, 
+            include: {
+                model: this.movieRepository,
+                attributes: [
+                    'id',
+                    'kinopoiskId',
+                    'nameRu',
+                    'nameEn',
+                    'ratingKinopoiskVoteCount',
+                    'ratingKinopoisk',
+                    'year',
+                    'type',
+                    'posterUrl',
+                    'posterUrlPreview',
+                ],
+                through: { attributes: [] },
+            }, 
+            attributes: [],
+        });
+        return movies[0].similarMovies;
+    }
 }

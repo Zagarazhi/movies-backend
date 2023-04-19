@@ -17,7 +17,7 @@ export class InfoController {
         @Query('type') type: string,
         @Query('minRatings') minRatings: number,
         @Query('numRatings') numRatings: number,
-    ): Promise<Movie[]> {
+    ): Promise<{rows: Movie[], count: number}> {
         const filters: Record<string, any> = {};
 
         /*
