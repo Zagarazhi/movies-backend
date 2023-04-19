@@ -16,6 +16,7 @@ async function bootstrap() {
             }
         }
     );
+    app.enableCors();
     app.useGlobalPipes(new ValidationPipe());
     await app.startAllMicroservices();
     await app.listen(configService.get("PARSER_PORT"));
