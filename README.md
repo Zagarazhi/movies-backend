@@ -8,15 +8,18 @@
 - Микросервис парсера: npm run start:dev parser
 
 # Пути
-GET "MOVIES_PORT"/movies/:id - получение информации по конкретному фильму
-GET "MOVIES_PORT"/movies/:id/videos - получение видео по фильму
-GET "MOVIES_PORT"/movies/:id/similar - получение массива похожих фильмов
+## movie
+- GET "MOVIES_PORT"/movies/:id - получение информации по конкретному фильму
+- GET "MOVIES_PORT"/movies/:id/videos - получение видео по фильму
+- GET "MOVIES_PORT"/movies/:id/similar - получение массива похожих фильмов  
 Пример: localhost:3001/movies/1
----
-POST "PARSER_PORT"/parse/movie/:kinopoiskId - парсинг фильма с кинопоиска
+
+## parser
+- POST "PARSER_PORT"/parse/movie/:kinopoiskId - парсинг фильма с кинопоиска  
 Можете не запускать этот микросервис, все остальные микросервисы работают без него
----
-GET "INFO_PORT"/info - получение списка фильмов
+
+## info
+- GET "INFO_PORT"/info - получение списка фильмов  
 Пример: localhost:3003/info?countries=1,2&genres=1,2&order=year-ASC&type=FILM&page=2&limit=1&minRating=5.5&numRatings=100000
 - countries=1,2 - фильтр по странам 1,2
 - genres=1,2 - фильтр по жанрам 1, 2
