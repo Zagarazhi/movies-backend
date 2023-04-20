@@ -37,18 +37,18 @@
 - GET "COMMENT_PORT"/comments/:commentId/comment - получение конкретного комментария по его id
 - POST "COMMENT_PORT"/comments/:movieId - создание нового комментария.  
 Структура:  
-{
-    "type": "POSITIVE" | "NEUTRAL" | "NEGATIVE",
-    "title": "test",
-    "description": "test",
-    "repliedOnComment": 666
+{  
+    "type": "POSITIVE" | "NEUTRAL" | "NEGATIVE",  
+    "title": "test",  
+    "description": "test",  
+    "repliedOnComment": 666  
 }  
 Поле repliedOnComment - необязательное. При уставновке его значения на null будет считаться комментарием к фильму.  
 - PUT "COMMENT_PORT"/comments/:commentId/comment - обновление комментария.  
 Структура:  
-{
-    "type": "POSITIVE" | "NEUTRAL" | "NEGATIVE",
-    "title": "test",
-    "description": "test"
+{  
+    "type": "POSITIVE" | "NEUTRAL" | "NEGATIVE",  
+    "title": "test",  
+    "description": "test"  
 }  
 Все поля являются необязательными.
