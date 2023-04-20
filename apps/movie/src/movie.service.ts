@@ -117,6 +117,18 @@ export class MovieService {
                     'posterUrlPreview',
                 ],
                 through: { attributes: [] },
+                include: [
+                    {
+                        model: Genre,
+                        attributes: ['id', 'nameRu', 'nameEn'],
+                        through: { attributes: [] },
+                    },
+                    {
+                        model: Country,
+                        attributes: ['id', 'nameRu', 'nameEn'],
+                        through: { attributes: [] },
+                    },
+                ],
             }, 
             attributes: [],
         });

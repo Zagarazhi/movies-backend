@@ -62,6 +62,7 @@ export class InfoService {
                 'ratingKinopoisk',
                 'year',
                 'type',
+                'filmLength',
                 'posterUrl',
                 'posterUrlPreview',
             ],

@@ -8,3 +8,7 @@ export * from './movies-shared/similar-movies';
 export * from './movies-shared/dto/create-country.dto';
 export * from './movies-shared/dto/create-genre.dto';
 export * from './movies-shared/dto/create-movie.dto';
+export * from './comments-shared/comment.model';
+export * from './comments-shared/dto/create-comment.dto';
+export * from './comments-shared/dto/write-comment.dto';
+export * from './comments-shared/dto/update-comment.dto';

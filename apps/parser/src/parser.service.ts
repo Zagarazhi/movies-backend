@@ -1,14 +1,16 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from "@nestjs/microservices";
 import axios from 'axios';
-import { CreateMovieDto, Movie } from '@app/common';
+import { CreateCommentDto, CreateMovieDto, Movie } from '@app/common';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ParserService {
 
-    constructor(@Inject('MOVIE_SERVICE') private client: ClientProxy) {}
+    constructor(@Inject('MOVIE_SERVICE') private movieClient: ClientProxy,
+                @Inject('COMMENT_SERVICE') private commentClient: ClientProxy) {}
 
-    private async createMovieDtoFromJson(json: any, videos: any, posters: any, similar: any): Promise<CreateMovieDto> {
+    private createMovieDtoFromJson(json: any, videos: any, posters: any, similar: any): CreateMovieDto {
         const movieDto: CreateMovieDto = {
             kinopoiskId: json.kinopoiskId,
             nameRu: json.nameRu,
@@ -41,16 +43,38 @@ export class ParserService {
         return movieDto;
     }
 
+    private createCommentsFromJson(json: any, movieId: number) {
+        const comments = [];
+        for(const item of json) {
+            const comment: CreateCommentDto = {
+                type: item.type,
+                date: item.date,
+                author: item.author,
+                title: item.title,
+                description: item.description,
+                movieId,
+            }
+            comments.push(comment);
+        }
+        return comments;
+    }
+
     async parseMovie(id: number) {
         const headers = { 'X-API-KEY': process.env.API_KINOPOISK };
         const config = { headers };
+
         const response = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}`, config);
         const videos = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/videos`, config);
         const posters = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/images?type=POSTER&page=1`, config);
         const similar = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/similars`, config);
-        const payload = await this.createMovieDtoFromJson(response.data, videos.data, posters.data.items, similar.data.items);
+        const comments = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/reviews?page=1&order=DATE_DESC`, config);
+
+        const payload = this.createMovieDtoFromJson(response.data, videos.data, posters.data.items, similar.data.items);
         const pattern = { cmd: 'movie' };
-        const result = this.client.send<void | Movie>(pattern, payload);
+        const result = await lastValueFrom(this.movieClient.send<Movie>(pattern, payload));
+        
+        const addedComments = await lastValueFrom(this.commentClient.send<Comment[]>({cmd: 'comment'}, this.createCommentsFromJson(comments.data.items, result.id)));
+
         return result;
     }
 }
