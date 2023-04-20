@@ -22,6 +22,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                 }),
                 inject: [ConfigService],
             },
+            {
+                name: 'COMMENT_SERVICE',
+                useFactory: (configService: ConfigService) => ({
+                    transport: Transport.TCP,
+                    options: {
+                        port: configService.get('COMMENT_PORT'),
+                        host: configService.get('COMMENT_HOST'),
+                    },
+                }),
+                inject: [ConfigService],
+            },
         ]),
     ],
     controllers: [ParserController],
