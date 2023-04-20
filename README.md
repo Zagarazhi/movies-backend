@@ -2,10 +2,11 @@
 Этот проект представляет собой сервер для работы с фильмами и персоналом
 
 # Запуск
-Для старта заполните [конфигурационный файл](.env). После этого запустите решение:
+Для старта заполните [конфигурационный файл](.env). Обратите внимание, что у фильмов и комментариев разные базы данных. После найстроки запустите решение:
 - Микросервис фильмов: npm run start:dev movie
 - Микросервис информации: npm run start:dev info
 - Микросервис парсера: npm run start:dev parser
+- Микросервис комментариев: npm run start:dev comment
 
 # Пути
 ## movie
@@ -29,3 +30,25 @@
 - limit=1 - количество элементов на странице
 - minRating=5.5 - рейтинг ОТ
 - numRatings=100000 - число оценок ОТ
+
+## comment
+- GET "COMMENT_PORT"/comments/:movieId/tree - все комментарии к фильму в древовидном представлении
+- GET "COMMENT_PORT"/comments/:movieId/flat - все комментарии к фильму в плоском представлении
+- GET "COMMENT_PORT"/comments/:commentId/comment - получение конкретного комментария по его id
+- POST "COMMENT_PORT"/comments/:movieId - создание нового комментария.  
+Структура:  
+{
+    "type": "POSITIVE" | "NEUTRAL" | "NEGATIVE",
+    "title": "test",
+    "description": "test",
+    "repliedOnComment": 666
+}  
+Поле repliedOnComment - необязательное. При уставновке его значения на null будет считаться комментарием к фильму.  
+- PUT "COMMENT_PORT"/comments/:commentId/comment - обновление комментария.  
+Структура:  
+{
+    "type": "POSITIVE" | "NEUTRAL" | "NEGATIVE",
+    "title": "test",
+    "description": "test"
+}  
+Все поля являются необязательными.
