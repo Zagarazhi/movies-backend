@@ -44,7 +44,7 @@
     "repliedOnComment": 666  
 }  
 Поле repliedOnComment - необязательное. При уставновке его значения на null будет считаться комментарием к фильму.  
-- PUT "COMMENT_PORT"/comments/:commentId/comment - обновление комментария.  
+- PUT "COMMENT_PORT"/comments/comment/:commentId - обновление комментария.  
 Структура:  
 {  
     "type": "POSITIVE" | "NEUTRAL" | "NEGATIVE",  
