@@ -17,6 +17,7 @@ export class InfoController {
         @Query('type') type: string,
         @Query('minRating') minRating: number,
         @Query('numRatings') numRatings: number,
+        @Query('years') years: string,
     ): Promise<{rows: Movie[], count: number}> {
         const filters: Record<string, any> = {};
 
@@ -39,6 +40,14 @@ export class InfoController {
         }
         if (numRatings) {
             filters.ratingKinopoiskVoteCount = { [Op.gte]: numRatings };
+        }
+        if(years) {
+            const [startYear, endYear] = years.split('-');
+            if(+startYear && !+endYear) {
+                filters.year = { [Op.eq]: +startYear }
+            } else if (+startYear && +endYear) {
+                filters.year = { [Op.between]: [+startYear, +endYear] }
+            }
         }
 
         return this.infoService.findAll(page, limit, order, genreIds, countryIds, filters);
