@@ -112,6 +112,7 @@ export class MovieService {
                     'ratingKinopoiskVoteCount',
                     'ratingKinopoisk',
                     'year',
+                    'filmLength',
                     'type',
                     'posterUrl',
                     'posterUrlPreview',
