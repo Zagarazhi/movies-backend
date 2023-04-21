@@ -1,4 +1,4 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Get } from "@nestjs/common";
 import { CountryService } from "./country.service";
 import { MessagePattern } from "@nestjs/microservices";
 import { Country } from "@app/common";
@@ -11,5 +11,10 @@ export class CountryController {
     @MessagePattern({cmd: 'country'})
     async createCountry(data: CreateCountryDto) : Promise<Country> {
         return this.countryService.createCountry(data);
+    }
+
+    @Get('/filters/countries')
+    async getAllCountries(): Promise<Country[]> {
+        return this.countryService.getAllCountries();
     }
 }
