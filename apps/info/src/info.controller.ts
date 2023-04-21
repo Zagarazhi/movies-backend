@@ -15,7 +15,7 @@ export class InfoController {
         @Query('genres') genres: string,
         @Query('countries') countries: string,
         @Query('type') type: string,
-        @Query('minRatings') minRatings: number,
+        @Query('minRating') minRating: number,
         @Query('numRatings') numRatings: number,
     ): Promise<{rows: Movie[], count: number}> {
         const filters: Record<string, any> = {};
@@ -34,8 +34,8 @@ export class InfoController {
         if (type) {
             filters.type = type;
         }
-        if (minRatings) {
-            filters.ratingKinopoisk = { [Op.gte]: minRatings };
+        if (minRating) {
+            filters.ratingKinopoisk = { [Op.gte]: minRating };
         }
         if (numRatings) {
             filters.ratingKinopoiskVoteCount = { [Op.gte]: numRatings };
