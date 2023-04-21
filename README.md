@@ -23,7 +23,7 @@
 
 ## info
 - GET "INFO_PORT"/info - получение списка фильмов  
-Пример: localhost:3003/info?countries=1,2&genres=1,2&order=year-ASC&type=FILM&page=2&limit=1&minRating=5.5&numRatings=100000
+Пример: localhost:3003/info?countries=1,2&genres=1,2&order=year-ASC&type=FILM&page=2&limit=1&minRating=5.5&numRatings=100000&years=1999-2003  
 - countries=1,2 - фильтр по странам 1,2
 - genres=1,2 - фильтр по жанрам 1, 2
 - order=year-ASC - сортировка по годам по возрастанию
@@ -32,6 +32,7 @@
 - limit=1 - количество элементов на странице
 - minRating=5.5 - рейтинг ОТ
 - numRatings=100000 - число оценок ОТ
+- years=1999-2003 - фильтр по годам (если написать years=1999, то будут только фильмы 1999)
 
 ## comment
 - GET "COMMENT_PORT"/comments/:movieId/tree - все комментарии к фильму в древовидном представлении
