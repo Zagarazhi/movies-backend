@@ -12,6 +12,11 @@ export class CountryService {
         return country;
     }
 
+    async getAllCountries(): Promise<Country[]> {
+        const countries = await this.countryRepository.findAll();
+        return countries;
+    }
+
     async createOrFindCountries(countryDtos: CreateCountryDto[]): Promise<Country[]> {
         const countries = [];
       

@@ -1,4 +1,4 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Get } from "@nestjs/common";
 import { MessagePattern } from "@nestjs/microservices";
 import { Genre } from "@app/common";
 import { CreateGenreDto } from "@app/common";
@@ -11,5 +11,10 @@ export class GenreController {
     @MessagePattern({cmd: 'country'})
     async createCountry(data: CreateGenreDto) : Promise<Genre> {
         return this.genreService.createGenre(data);
+    }
+
+    @Get('/filters/genres')
+    async getAllGenres(): Promise<Genre[]> {
+        return this.genreService.getAllGenres();
     }
 }

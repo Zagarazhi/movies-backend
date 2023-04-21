@@ -13,6 +13,8 @@
 - GET "MOVIES_PORT"/movies/:id - получение информации по конкретному фильму
 - GET "MOVIES_PORT"/movies/:id/videos - получение видео по фильму
 - GET "MOVIES_PORT"/movies/:id/similar - получение массива похожих фильмов  
+- GET "MOVIES_PORT"/movies/filters/genres - получение массива жанров  
+- GET "MOVIES_PORT"/movies/filters/countries - получение массива стран  
 Пример: localhost:3001/movies/1
 
 ## parser
