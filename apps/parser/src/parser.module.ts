@@ -33,6 +33,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                 }),
                 inject: [ConfigService],
             },
+            {
+                name: 'PERSON_SERVICE',
+                useFactory: (configService: ConfigService) => ({
+                    transport: Transport.TCP,
+                    options: {
+                        port: configService.get('PERSON_PORT'),
+                        host: configService.get('PERSON_HOST'),
+                    },
+                }),
+                inject: [ConfigService],
+            },
         ]),
     ],
     controllers: [ParserController],

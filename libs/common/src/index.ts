@@ -12,3 +12,7 @@ export * from './comments-shared/comment.model';
 export * from './comments-shared/dto/create-comment.dto';
 export * from './comments-shared/dto/write-comment.dto';
 export * from './comments-shared/dto/update-comment.dto';
+export * from './person-shared/person.model';
+export * from './person-shared/role-info.model';
+export * from './person-shared/dto/create-person.dto';
+export * from './person-shared/dto/create-role-info.dto';

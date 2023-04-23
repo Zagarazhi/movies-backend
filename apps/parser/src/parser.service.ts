@@ -1,14 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from "@nestjs/microservices";
 import axios from 'axios';
-import { CreateCommentDto, CreateMovieDto, Movie } from '@app/common';
+import { CreateCommentDto, CreateMovieDto, CreatePersonDto, CreateRoleInfoDto, Movie, Person } from '@app/common';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ParserService {
 
     constructor(@Inject('MOVIE_SERVICE') private movieClient: ClientProxy,
-                @Inject('COMMENT_SERVICE') private commentClient: ClientProxy) {}
+                @Inject('COMMENT_SERVICE') private commentClient: ClientProxy,
+                @Inject('PERSON_SERVICE') private personClient: ClientProxy, ) {}
 
     private createMovieDtoFromJson(json: any, videos: any, posters: any, similar: any): CreateMovieDto {
         const movieDto: CreateMovieDto = {
@@ -59,6 +60,26 @@ export class ParserService {
         return comments;
     }
 
+    private createPersonsFromJson(json: any, movieId: number) {
+        const persons = [];
+        for(const item of json) {
+            const person: CreatePersonDto = {
+                nameRu: item.nameRu,
+                nameEn: item.nameEn,
+                staffId: item.staffId,
+                posterUrl: item.posterUrl,
+                role: {
+                    movieId,
+                    nameRu: item.professionText,
+                    nameEn: item.professionKey.charAt(0).toUpperCase() + item.professionKey.slice(1).toLowerCase() + 's',
+                    description: item.description,
+                },
+            };
+            persons.push(person);
+        }
+        return persons;
+    }
+
     async parseMovie(id: number) {
         const headers = { 'X-API-KEY': process.env.API_KINOPOISK };
         const config = { headers };
@@ -68,12 +89,14 @@ export class ParserService {
         const posters = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/images?type=POSTER&page=1`, config);
         const similar = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/similars`, config);
         const comments = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/reviews?page=1&order=DATE_DESC`, config);
+        const persons = await axios.get(`https://kinopoiskapiunofficial.tech/api/v1/staff?filmId=${id}`, config);
 
         const payload = this.createMovieDtoFromJson(response.data, videos.data, posters.data.items, similar.data.items);
         const pattern = { cmd: 'movie' };
         const result = await lastValueFrom(this.movieClient.send<Movie>(pattern, payload));
         
         const addedComments = await lastValueFrom(this.commentClient.send<Comment[]>({cmd: 'comment'}, this.createCommentsFromJson(comments.data.items, result.id)));
+        const addedPersons = await lastValueFrom(this.personClient.send<Person[]>({cmd: 'person'}, this.createPersonsFromJson(persons.data, result.id)));
 
         return result;
     }

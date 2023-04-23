@@ -1,11 +1,17 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { InfoService } from './info.service';
-import { Movie } from '@app/common';
+import { Movie, Person } from '@app/common';
 import { Op } from 'sequelize';
 
 @Controller('/info')
 export class InfoController {
     constructor(private readonly infoService: InfoService) {}
+
+    @Get('/person/:personId')
+    async getRolesByPersonId(@Param('personId') personId: number) {
+        const person = await this.infoService.getRolesByPersonId(personId);
+        return person;
+    }
 
     @Get()
     async findAll(
@@ -18,8 +24,13 @@ export class InfoController {
         @Query('minRating') minRating: number,
         @Query('numRatings') numRatings: number,
         @Query('years') years: string,
+        @Query('actors') actors: string,
+        @Query('directors') directors: string,
+        @Query('staff') staff: string,
+        @Query('keywords') keywords: string,
     ): Promise<{rows: Movie[], count: number}> {
         const filters: Record<string, any> = {};
+        const persons: Record<string, any> = {};
 
         const genreIds = genres ? genres.split(',').map(g => +g).filter(g => !isNaN(g)) : [];
         const countryIds = countries ? countries.split(',').map(c => +c).filter(c => !isNaN(c)) : [];
@@ -49,7 +60,16 @@ export class InfoController {
                 filters.year = { [Op.between]: [+startYear, +endYear] }
             }
         }
+        if(actors) {
+            persons.actors = actors.split(',');
+        }
+        if(directors) {
+            persons.directors = directors.split(',');
+        }
+        if(staff) {
+            persons.staff = staff.split(',');
+        }
 
-        return this.infoService.findAll(page, limit, order, genreIds, countryIds, filters);
+        return this.infoService.findAll(page, limit, order, genreIds, countryIds, filters, persons, keywords);
     }
 }
