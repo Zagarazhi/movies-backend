@@ -99,6 +99,26 @@ export class MovieService {
         return movie; 
     }
 
+    async getAllMoviesByIds(ids: number[]) {
+        const movies = await this.movieRepository.findAll({
+            where: {id: {[Op.in]: ids}},
+            attributes: [
+                'id',
+                'kinopoiskId',
+                'nameRu',
+                'nameEn',
+                'ratingKinopoiskVoteCount',
+                'ratingKinopoisk',
+                'year',
+                'filmLength',
+                'type',
+                'posterUrl',
+                'posterUrlPreview',
+            ],
+        });
+        return movies;
+    }
+
     async getSimilarByMovieID(id: number) {
         const movies = await this.movieRepository.findAll({
             where: {id}, 

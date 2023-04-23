@@ -14,6 +14,12 @@ export class MovieController {
         return result;
     }
 
+    @MessagePattern({cmd: 'get_all_movies'})
+    async getAllMoviesByIds(ids: number[]) : Promise<Movie[]> {
+        const result = await this.movieService.getAllMoviesByIds(ids);
+        return result;
+    }
+
     @Get('/:id')
     async getMovieById(@Param('id') id: number) {
         const result = await this.movieService.getMovieById(id);
