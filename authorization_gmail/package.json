@@ -1,0 +1,22 @@
+{
+  "name": "authorization_vk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "auth_gmail.js",
+  "scripts": {
+    "start": "node auth_gmail.js",
+    "dev": "nodemon --ignore sessions/ auth_gmail.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "connect-flash": "^0.1.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "nodemon": "^2.0.22",
+    "passport": "^0.6.0",
+    "passport-google-oauth": "^2.0.0",
+    "session-file-store": "^1.5.0"
+  }
+}
