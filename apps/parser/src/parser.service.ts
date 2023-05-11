@@ -11,13 +11,13 @@ export class ParserService {
                 @Inject('COMMENT_SERVICE') private commentClient: ClientProxy,
                 @Inject('PERSON_SERVICE') private personClient: ClientProxy, ) {}
 
-    private createMovieDtoFromJson(json: any, videos: any, posters: any, similar: any): CreateMovieDto {
+    private createMovieDtoFromJson(json: any, videos: any, similar: any): CreateMovieDto {
         const movieDto: CreateMovieDto = {
             kinopoiskId: json.kinopoiskId,
             nameRu: json.nameRu,
             nameEn: json.nameEn || json.nameOriginal,
-            posterUrl: posters ? posters[0].imageUrl : null,
-            posterUrlPreview: posters ? posters[0].previewUrl : null,
+            posterUrl: json.posterUrl,
+            posterUrlPreview: json.posterUrlPreview,
             coverUrl: json.coverUrl,
             logoUrl: json.logoUrl,
             ratingKinopoisk: json.ratingKinopoisk,
@@ -86,12 +86,11 @@ export class ParserService {
 
         const response = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}`, config);
         const videos = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/videos`, config);
-        const posters = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/images?type=POSTER&page=1`, config);
         const similar = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/similars`, config);
         const comments = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${id}/reviews?page=1&order=DATE_DESC`, config);
         const persons = await axios.get(`https://kinopoiskapiunofficial.tech/api/v1/staff?filmId=${id}`, config);
 
-        const payload = this.createMovieDtoFromJson(response.data, videos.data, posters.data.items, similar.data.items);
+        const payload = this.createMovieDtoFromJson(response.data, videos.data, similar.data.items);
         const pattern = { cmd: 'movie' };
         const result = await lastValueFrom(this.movieClient.send<Movie>(pattern, payload));
         

@@ -22,13 +22,17 @@ export class PersonService {
         return await Promise.all(rolePromises);
     }
 
-    async getAllPersons(): Promise<Person[]> {
-        const persons = await this.personRepository.findAll();
+    async getAllPersons(page: number, limit: number): Promise<Person[]> {
+        const offset = (page - 1) * limit;
+        const persons = await this.personRepository.findAll({offset, limit});
         return persons;
     }
 
-    async getAllPersonsByKeywords(keywords: string): Promise<Person[]> {
+    async getAllPersonsByKeywords(page: number, limit: number, keywords: string): Promise<Person[]> {
+        const offset = (page - 1) * limit;
         const persons = await this.personRepository.findAll({
+            offset, 
+            limit,
             where: {
                 [Op.or]: {
                     nameRu: {[Op.iLike]: `%${keywords}%`},
@@ -39,8 +43,11 @@ export class PersonService {
         return persons;
     }
 
-    async getAllActors(): Promise<Person[]> {
+    async getAllActors(page: number, limit: number): Promise<Person[]> {
+        const offset = (page - 1) * limit;
         const actors = await this.personRepository.findAll({
+            offset, 
+            limit,
             include: [
                 {
                     model: this.roleInfoRepository,
@@ -52,8 +59,27 @@ export class PersonService {
         return actors;
     }
 
-    async getAllDirectors(): Promise<Person[]> {
+    async getAllActorsByKeywords(page: number, limit: number, keywords: string): Promise<Person[]> {
+        const offset = (page - 1) * limit;
+        const persons = await this.personRepository.findAll({
+            offset, 
+            limit,
+            where: {
+                nameEn: 'Actors',
+                [Op.or]: {
+                    nameRu: {[Op.iLike]: `%${keywords}%`},
+                    nameEn: {[Op.iLike]: `%${keywords}%`}
+                }    
+            }
+        });
+        return persons;
+    }
+
+    async getAllDirectors(page: number, limit: number): Promise<Person[]> {
+        const offset = (page - 1) * limit;
         const directors = await this.personRepository.findAll({
+            offset, 
+            limit,
             include: [
                 {
                     model: this.roleInfoRepository,
@@ -65,8 +91,27 @@ export class PersonService {
         return directors;
     }
 
-    async getAllStaff(): Promise<Person[]> {
+    async getAllDirectorsByKeywords(page: number, limit: number, keywords: string): Promise<Person[]> {
+        const offset = (page - 1) * limit;
+        const persons = await this.personRepository.findAll({
+            offset, 
+            limit,
+            where: {
+                nameEn: 'Directors',
+                [Op.or]: {
+                    nameRu: {[Op.iLike]: `%${keywords}%`},
+                    nameEn: {[Op.iLike]: `%${keywords}%`}
+                }    
+            }
+        });
+        return persons;
+    }
+
+    async getAllStaff(page: number, limit: number): Promise<Person[]> {
+        const offset = (page - 1) * limit;
         const stuff = await this.personRepository.findAll({
+            offset, 
+            limit,
             include: [
                 {
                     model: this.roleInfoRepository,

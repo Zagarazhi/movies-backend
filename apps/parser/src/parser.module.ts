@@ -3,6 +3,7 @@ import { ParserController } from './parser.controller';
 import { ParserService } from './parser.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AccessTokenStrategy, GoogleStrategy, RefreshTokenStrategy, VKStrategy } from '@app/common';
 
 @Module({
     imports: [
@@ -47,7 +48,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         ]),
     ],
     controllers: [ParserController],
-    providers: [ParserService],
+    providers: [ParserService, AccessTokenStrategy, RefreshTokenStrategy, GoogleStrategy, VKStrategy],
     exports: [ClientsModule],
 })
 export class ParserModule {}

@@ -3,11 +3,16 @@
 
 # Запуск
 Для старта заполните [конфигурационный файл](.env). Обратите внимание, что у фильмов и комментариев разные базы данных. После найстроки запустите решение:
+- pm2 start ecosystem.config.js  
+(Но до этого нужно запустить хотя бы раз каждый микросервис)
 - Микросервис фильмов: npm run start:dev movie
 - Микросервис информации: npm run start:dev info
 - Микросервис парсера: npm run start:dev parser
 - Микросервис комментариев: npm run start:dev comment
 - Микросервис персонала: npm run start:dev person
+- Микросервис авторизации: npm run start:dev auth
+Чтобы остановать:  
+- pm2 stop all  
 
 # Пути
 ## movie
@@ -19,7 +24,7 @@
 Пример: localhost:3001/movies/1
 
 ## parser
-- POST "PARSER_PORT"/parse/movie/:kinopoiskId - парсинг фильма с кинопоиска  
+- (ADMIN) POST "PARSER_PORT"/parse/movie/:kinopoiskId - парсинг фильма с кинопоиска  
 Можете не запускать этот микросервис, все остальные микросервисы работают без него
 
 ## info
@@ -44,7 +49,7 @@
 - GET "COMMENT_PORT"/comments/:movieId/tree - все комментарии к фильму в древовидном представлении
 - GET "COMMENT_PORT"/comments/:movieId/flat - все комментарии к фильму в плоском представлении
 - GET "COMMENT_PORT"/comments/:commentId/comment - получение конкретного комментария по его id
-- POST "COMMENT_PORT"/comments/:movieId - создание нового комментария.  
+- (USER) POST "COMMENT_PORT"/comments/:movieId - создание нового комментария.  
 Структура:  
 {  
     "type": "POSITIVE" | "NEUTRAL" | "NEGATIVE",  
@@ -53,7 +58,7 @@
     "repliedOnComment": 666  
 }  
 Поле repliedOnComment - необязательное. При уставновке его значения на null будет считаться комментарием к фильму.  
-- PUT "COMMENT_PORT"/comments/comment/:commentId - обновление комментария.  
+- (USER) PUT "COMMENT_PORT"/comments/comment/:commentId - обновление комментария.  
 Структура:  
 {  
     "type": "POSITIVE" | "NEUTRAL" | "NEGATIVE",  
@@ -63,8 +68,36 @@
 Все поля являются необязательными.
 
 ## person
-- GET "PERSON_PORT"/persons/all?keywords=киану - получение всего персонала по ключем словам  
-- GET "PERSON_PORT"/persons/actors - получение всех актеров  
-- GET "PERSON_PORT"/persons/directors - получение всех режиссеров  
-- GET "PERSON_PORT"/persons/staff - получение всего остального персонала  
+- GET "PERSON_PORT"/persons/all?keywords=киану&page=1&limit=10 - получение всего персонала по ключем словам  
+- GET "PERSON_PORT"/persons/actors?keywords=киану&page=1&limit=1 - получение всех актеров  
+- GET "PERSON_PORT"/persons/directors?keywords=киану&page=1&limit=1 - получение всех режиссеров  
+- GET "PERSON_PORT"/persons/staff?page=1&limit=1 - получение всего остального персонала  
 - GET "PERSON_PORT"/persons/:movieId - получение персонала по фильму  
+
+## auth
+- GET "AUTH_PORT"/auth/google - авторизация через гугл, возвращает access и resresh токены  
+- GET "AUTH_PORT"/auth/vk - авторизация через вк, возвращает access и resresh токены  
+- POST "AUTH_PORT"/signup - регистрация  
+Структура:  
+{  
+    "login": "admin",  
+    "email": "admin@mail.ru",  
+    "password": "admin"  
+}  
+- POST "AUTH_PORT"/signin - вход  
+Структура:  
+{  
+    "login": "admin",  
+    "email": "admin@mail.ru",  
+    "password": "admin"  
+}  
+- (USER) GET "AUTH_PORT"/auth/logout - выход  
+- (USER) GET "AUTH_PORT"/auth/refresh - обновить рефреш токен, возвращает access и resresh токены  
+- (USER) GET "AUTH_PORT"/users/info - возвращает логин и почту текущего пользователя  
+- (ADMIN) POST "AUTH_PORT"/roles - создает новую роль  
+Структура:  
+{  
+    "value": "USER",  
+    "description": "Простой и обычный"  
+}  
+- (ADMIN) GET "AUTH_PORT"/users/isadmin - возвращает true, если админ или 401

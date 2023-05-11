@@ -3,7 +3,7 @@ import { PersonController } from './person.controller';
 import { PersonService } from './person.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Person, RoleInfo } from '@app/common';
+import { AccessTokenStrategy, GoogleStrategy, Person, RefreshTokenStrategy, RoleInfo, VKStrategy } from '@app/common';
 
 @Module({
     imports: [
@@ -30,6 +30,6 @@ import { Person, RoleInfo } from '@app/common';
         }),
     ],
     controllers: [PersonController],
-    providers: [PersonService],
+    providers: [PersonService, AccessTokenStrategy, RefreshTokenStrategy, GoogleStrategy, VKStrategy],
 })
 export class PersonModule {}

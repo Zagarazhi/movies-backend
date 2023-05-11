@@ -39,28 +39,47 @@ export class PersonController {
     }
 
     @Get('/all')
-    async getAllPersons(@Query('keywords') keywords: string): Promise<Person[]> {
+    async getAllPersons(
+        @Query('keywords') keywords: string,
+        @Query('page') page = 1,
+        @Query('limit') limit = 10,
+    ): Promise<Person[]> {
         const persons = keywords ? 
-            await this.personService.getAllPersonsByKeywords(keywords) :
-            await this.personService.getAllPersons() ;
+            await this.personService.getAllPersonsByKeywords(page, limit, keywords) :
+            await this.personService.getAllPersons(page, limit) ;
         return persons;
     }
 
     @Get('/actors')
-    async getAllActors(): Promise<Person[]> {
-        const persons = await this.personService.getAllActors();
+    async getAllActors(
+        @Query('keywords') keywords: string,
+        @Query('page') page = 1,
+        @Query('limit') limit = 10,
+    ): Promise<Person[]> {
+        const persons = keywords ? 
+            await this.personService.getAllActorsByKeywords(page, limit, keywords) :
+            await this.personService.getAllActors(page, limit);
         return persons;
     }
 
     @Get('/directors')
-    async getAllDirectors(): Promise<Person[]> {
-        const persons = await this.personService.getAllDirectors();
+    async getAllDirectors(
+        @Query('keywords') keywords: string,
+        @Query('page') page = 1,
+        @Query('limit') limit = 10,
+    ): Promise<Person[]> {
+        const persons = keywords ? 
+            await this.personService.getAllDirectorsByKeywords(page, limit, keywords) :
+            await this.personService.getAllDirectors(page, limit);
         return persons;
     }
 
     @Get('/staff')
-    async getAllStaff(): Promise<Person[]> {
-        const persons = await this.personService.getAllStaff();
+    async getAllStaff(
+        @Query('page') page = 1,
+        @Query('limit') limit = 10,
+    ): Promise<Person[]> {
+        const persons = await this.personService.getAllStaff(page, limit);
         return persons;
     }
 
