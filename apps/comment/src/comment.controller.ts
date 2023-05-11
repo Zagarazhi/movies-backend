@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Req, UseGuards } from '@nestjs/common';
 import { CommentService } from './comment.service';
-import { CreateCommentDto, UpdateCommentDto, WriteCommentDto } from '@app/common';
+import { AccessTokenGuard, CreateCommentDto, Roles, RolesGuard, UpdateCommentDto, WriteCommentDto } from '@app/common';
 import { MessagePattern } from '@nestjs/microservices';
+import { Request } from 'express';
 
 @Controller('/comments')
 export class CommentController {
@@ -13,9 +14,13 @@ export class CommentController {
         return result;
     }
 
+    @UseGuards(AccessTokenGuard, RolesGuard)
+    @Roles('USER')
     @Post('/:movieId')
-    async createComment(@Param('movieId') movieId: number, @Body() dto: WriteCommentDto) {
-        const result = await this.commentService.create(dto, movieId, 'test', 1);
+    async createComment(@Req() req: Request, @Param('movieId') movieId: number, @Body() dto: WriteCommentDto) {
+        const userId = req.user['sub'];
+        const name = req.user['login'];
+        const result = await this.commentService.create(dto, movieId, name, userId);
         return result;
     }
 
@@ -37,9 +42,12 @@ export class CommentController {
         return result;
     }
 
+    @UseGuards(AccessTokenGuard, RolesGuard)
+    @Roles('USER')
     @Put('/comment/:commentId')
-    async updateComment(@Param('commentId') commentId: number, @Body() dto: UpdateCommentDto) {
-        const result = await this.commentService.update(commentId, dto);
+    async updateComment(@Req() req: Request, @Param('commentId') commentId: number, @Body() dto: UpdateCommentDto) {
+        const userId = req.user['sub'];
+        const result = await this.commentService.update(userId, commentId, dto);
         return result;
     }
 }

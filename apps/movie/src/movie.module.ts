@@ -3,7 +3,7 @@ import { MovieController } from './movie.controller';
 import { MovieService } from './movie.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Movie, Country, Genre, MovieCountry, MovieGenre, Video, SimilarMovies } from "@app/common";
+import { Movie, Country, Genre, MovieCountry, MovieGenre, Video, SimilarMovies, AccessTokenStrategy, RefreshTokenStrategy, GoogleStrategy, VKStrategy } from "@app/common";
 import { CountryModule } from './country/country.module';
 import { VideoModule } from './video/video.module'
 import { GenreModule } from './genre/genre.module';
@@ -36,6 +36,6 @@ import { GenreModule } from './genre/genre.module';
         VideoModule,
     ],
     controllers: [MovieController],
-    providers: [MovieService],
+    providers: [MovieService, AccessTokenStrategy, RefreshTokenStrategy, GoogleStrategy, VKStrategy],
 })
 export class MovieModule {}

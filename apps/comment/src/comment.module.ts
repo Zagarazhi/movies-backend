@@ -3,7 +3,7 @@ import { CommentController } from './comment.controller';
 import { CommentService } from './comment.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Comment } from '@app/common';
+import { AccessTokenStrategy, Comment, GoogleStrategy, RefreshTokenStrategy, VKStrategy } from '@app/common';
 
 @Module({
     imports: [
@@ -30,6 +30,6 @@ import { Comment } from '@app/common';
         }),
     ],
     controllers: [CommentController],
-    providers: [CommentService],
+    providers: [CommentService, AccessTokenStrategy, RefreshTokenStrategy, GoogleStrategy, VKStrategy],
 })
 export class CommentModule {}

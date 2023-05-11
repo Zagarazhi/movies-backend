@@ -1,5 +1,5 @@
 import { Comment, CreateCommentDto, UpdateCommentDto, WriteCommentDto } from '@app/common';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
@@ -32,7 +32,7 @@ export class CommentService {
         return newComments;
     }
 
-    async update(commentId: number, dto: UpdateCommentDto): Promise<Comment> {
+    async update(userId: number, commentId: number, dto: UpdateCommentDto): Promise<Comment> {
         const comment = await this.commentRepository.findByPk(commentId, {
             include: [
                 { 
@@ -42,6 +42,9 @@ export class CommentService {
         });
         if (!comment) {
             throw new NotFoundException('Комментарий не найден');
+        }
+        if(userId != comment.userId){
+            throw new ForbiddenException('Нельзя редактировать чужой комментарий');
         }
         await comment.update(dto);
         return comment;

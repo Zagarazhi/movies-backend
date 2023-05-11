@@ -3,7 +3,7 @@ import { InfoController } from './info.controller';
 import { InfoService } from './info.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Country, Genre, Movie, MovieCountry, MovieGenre, SimilarMovies, Video } from '@app/common';
+import { AccessTokenStrategy, Country, Genre, GoogleStrategy, Movie, MovieCountry, MovieGenre, RefreshTokenStrategy, SimilarMovies, VKStrategy, Video } from '@app/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
@@ -66,6 +66,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         ]),
     ],
     controllers: [InfoController],
-    providers: [InfoService],
+    providers: [InfoService, AccessTokenStrategy, RefreshTokenStrategy, GoogleStrategy, VKStrategy],
 })
 export class InfoModule {}
