@@ -65,12 +65,18 @@ export class PersonService {
             offset, 
             limit,
             where: {
-                nameEn: 'Actors',
                 [Op.or]: {
                     nameRu: {[Op.iLike]: `%${keywords}%`},
                     nameEn: {[Op.iLike]: `%${keywords}%`}
                 }    
-            }
+            },
+            include: [
+                {
+                    model: this.roleInfoRepository,
+                    where: {nameEn: 'Actors'},
+                    attributes: [],
+                }
+            ],
         });
         return persons;
     }
@@ -97,12 +103,18 @@ export class PersonService {
             offset, 
             limit,
             where: {
-                nameEn: 'Directors',
                 [Op.or]: {
                     nameRu: {[Op.iLike]: `%${keywords}%`},
                     nameEn: {[Op.iLike]: `%${keywords}%`}
                 }    
-            }
+            },
+            include: [
+                {
+                    model: this.roleInfoRepository,
+                    where: {nameEn: 'Directors'},
+                    attributes: [],
+                }
+            ]
         });
         return persons;
     }
