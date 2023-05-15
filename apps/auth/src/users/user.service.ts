@@ -1,4 +1,4 @@
-import { CreateUserDto, User } from "@app/common";
+import { CreateUserDto, Role, User, UserRoles } from "@app/common";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 import { RoleService } from "../roles/role.service";
@@ -40,7 +40,21 @@ export class UserService {
     }
 
     async getInfoById(id: number): Promise<User> {
-        const user = await this.userRepository.findByPk(id, {attributes: ['login', 'email']});
+        const user = await this.userRepository.findByPk(
+            id,
+            {
+                attributes:  ['login', 'email'],
+                include: [
+                    {
+                        model: Role,
+                        attributes:  ['value'],
+                        through: {
+                            attributes: [],
+                        }
+                    },
+                ],
+            },
+        );
         return user;
     }
 
