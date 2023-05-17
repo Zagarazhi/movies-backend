@@ -5,6 +5,7 @@ import * as argon2 from 'argon2';
 import { ConfigService } from '@nestjs/config';
 import { AuthDto, CreateUserDto } from '@app/common';
 
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -23,12 +24,14 @@ export class AuthService {
             const roles = user.roles.map(role => role.value);
             const tokens = await this.getTokens(user.id, user.login, roles);
             await this.updateRefreshToken(user.id, tokens.refreshToken);
-            return tokens;
+            const { login, email, roles: rolesValues } = user;
+            return {...tokens, user: { login, email, roles: rolesValues }};
         }
         const roles = userExists.roles.map(role => role.value);
         const tokens = await this.getTokens(userExists.id, userExists.login, roles);
         await this.updateRefreshToken(userExists.id, tokens.refreshToken);
-        return tokens;
+        const { login, email, roles: rolesValues } = userExists;
+        return {...tokens, user: { login, email, roles: rolesValues }}
     }
 
     async vkLogin(req: any) {
@@ -41,12 +44,14 @@ export class AuthService {
             const roles = user.roles.map(role => role.value);
             const tokens = await this.getTokens(user.id, user.login, roles);
             await this.updateRefreshToken(user.id, tokens.refreshToken);
-            return tokens;
+            const { login, email, roles: rolesValues } = user;
+            return {...tokens, user: { login, email, roles: rolesValues }};
         }
         const roles = userExists.roles.map(role => role.value);
         const tokens = await this.getTokens(userExists.id, userExists.login, roles);
         await this.updateRefreshToken(userExists.id, tokens.refreshToken);
-        return tokens;
+        const { login, email, roles: rolesValues } = userExists;
+        return {...tokens, user: { login, email, roles: rolesValues }}
     }
 
     async signUp(createUserDto: CreateUserDto) {
@@ -65,7 +70,8 @@ export class AuthService {
         const roles = newUser.roles.map(role => role.value);
         const tokens = await this.getTokens(newUser.id, newUser.login, roles);
         await this.updateRefreshToken(newUser.id, tokens.refreshToken);
-        return tokens;
+        const { login, email, roles: rolesValues } = newUser;
+        return {...tokens, user: { login, email, roles: rolesValues }};
     }
 
     async signIn(data: AuthDto) {
@@ -76,7 +82,8 @@ export class AuthService {
         const roles = user.roles.map(role => role.value);
         const tokens = await this.getTokens(user.id, user.login, roles);
         await this.updateRefreshToken(user.id, tokens.refreshToken);
-        return tokens;
+        const { login, email, roles: rolesValues } = user;
+        return {...tokens, user: { login, email, roles: rolesValues }};
     }
 
     async refreshTokens(userId: number, refreshToken: string) {

@@ -59,7 +59,18 @@ export class UserService {
     }
 
     async findByUsername(login: string): Promise<User> {
-        const user = this.userRepository.findOne({where: {login}, include: {all: true}});
+        const user = this.userRepository.findOne({
+            where: {login},
+            include: [
+                {
+                    model: Role,
+                    attributes:  ['value'],
+                    through: {
+                        attributes: [],
+                    }
+                },
+            ],
+        });
         return user;
     }
 }
