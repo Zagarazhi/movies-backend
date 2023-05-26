@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { Country } from "@app/common";
+import { Country, UpdateCountryDto } from "@app/common";
 import { CreateCountryDto } from "@app/common";
 
 @Injectable()
@@ -29,5 +29,10 @@ export class CountryService {
         }
       
         return countries;
+    }
+
+    async updateCountry(updateDto: UpdateCountryDto): Promise<Country> {
+        const country = await this.countryRepository.update(updateDto, {where: {id: updateDto.id}, returning: true});
+        return country[1][0];
     }
 }

@@ -1,6 +1,6 @@
-import { Controller, Get } from "@nestjs/common";
+import { Body, Controller, Get, Put, UseGuards } from "@nestjs/common";
 import { MessagePattern } from "@nestjs/microservices";
-import { Genre } from "@app/common";
+import { AccessTokenGuard, Genre, Roles, RolesGuard, UpdateGenreDto } from "@app/common";
 import { CreateGenreDto } from "@app/common";
 import { GenreService } from "./genre.service";
 
@@ -16,5 +16,13 @@ export class GenreController {
     @Get('/filters/genres')
     async getAllGenres(): Promise<Genre[]> {
         return this.genreService.getAllGenres();
+    }
+
+    @Put('/update/genre')
+    @UseGuards(AccessTokenGuard, RolesGuard)
+    @Roles('ADMIN')
+    async updateMovie(@Body() dto: UpdateGenreDto) {
+        const result = await this.genreService.updateGenre(dto);
+        return result;
     }
 }

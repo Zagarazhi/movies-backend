@@ -21,7 +21,28 @@
 - GET "MOVIES_PORT"/movies/:id/similar - получение массива похожих фильмов  
 - GET "MOVIES_PORT"/movies/filters/genres - получение массива жанров  
 - GET "MOVIES_PORT"/movies/filters/countries - получение массива стран  
-Пример: localhost:3001/movies/1
+Пример: localhost:3001/movies/1  
+- PUT "MOVIES_PORT"/movies/update/genre - обновление жанра  
+Структура:  
+{  
+    "id": 1,  
+    "nameRu": "фантастика",  
+    "nameEn": "fantastic"  
+}  
+- PUT "MOVIES_PORT"/movies/update/country - обновление страны  
+Структура:  
+{  
+    "id": 1,  
+    "nameRu": "США",  
+    "nameEn": "USA"  
+}  
+- PUT "MOVIES_PORT"/movies/update/movie - обновление фильма  
+Структура:  
+{  
+    "id": 1,  
+    "nameRu": "Матрица",  
+    "nameEn": "The Matrix"  
+}  
 
 ## parser
 - (ADMIN) POST "PARSER_PORT"/parse/movie/:kinopoiskId - парсинг фильма с кинопоиска  
