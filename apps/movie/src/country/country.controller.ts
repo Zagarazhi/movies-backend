@@ -1,7 +1,7 @@
-import { Controller, Get } from "@nestjs/common";
+import { Body, Controller, Get, Put, UseGuards } from "@nestjs/common";
 import { CountryService } from "./country.service";
 import { MessagePattern } from "@nestjs/microservices";
-import { Country } from "@app/common";
+import { AccessTokenGuard, Country, Roles, RolesGuard, UpdateCountryDto } from "@app/common";
 import { CreateCountryDto } from "@app/common";
 
 @Controller('/movies')
@@ -16,5 +16,13 @@ export class CountryController {
     @Get('/filters/countries')
     async getAllCountries(): Promise<Country[]> {
         return this.countryService.getAllCountries();
+    }
+
+    @Put('/update/country')
+    @UseGuards(AccessTokenGuard, RolesGuard)
+    @Roles('ADMIN')
+    async updateMovie(@Body() dto: UpdateCountryDto) {
+        const result = await this.countryService.updateCountry(dto);
+        return result;
     }
 }

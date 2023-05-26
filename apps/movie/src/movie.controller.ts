@@ -1,7 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, UseGuards } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { MessagePattern } from "@nestjs/microservices";
-import { CreateMovieDto } from "@app/common";
+import { AccessTokenGuard, CreateMovieDto, Roles, RolesGuard, UpdateMovieDto } from "@app/common";
 import { Movie } from "@app/common";
 
 @Controller('/movies')
@@ -29,6 +29,14 @@ export class MovieController {
     @Get('/:id/similar')
     async getSimilarById(@Param('id') id: number) {
         const result = await this.movieService.getSimilarByMovieID(id);
+        return result;
+    }
+
+    @Put('/update/movie')
+    @UseGuards(AccessTokenGuard, RolesGuard)
+    @Roles('ADMIN')
+    async updateMovie(@Body() dto: UpdateMovieDto) {
+        const result = await this.movieService.updateMovie(dto);
         return result;
     }
 }

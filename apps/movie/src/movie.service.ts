@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Country, Genre, Movie, MovieCountry, MovieGenre } from "@app/common";
+import { Country, Genre, Movie, MovieCountry, MovieGenre, UpdateMovieDto } from "@app/common";
 import { CountryService } from './country/country.service';
 import { GenreService } from './genre/genre.service';
 import { CreateMovieDto } from "@app/common";
@@ -154,5 +154,10 @@ export class MovieService {
             attributes: [],
         });
         return movies[0].similarMovies;
+    }
+
+    async updateMovie(updateDto: UpdateMovieDto): Promise<Movie> {
+        const movie = await this.movieRepository.update(updateDto, {where: {id: updateDto.id}, returning: true});
+        return movie[1][0];
     }
 }

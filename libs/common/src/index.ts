@@ -30,3 +30,6 @@ export * from './strategies/accessToken.strategy';
 export * from './strategies/refreshToken.strategy';
 export * from './strategies/google.strategy';
 export * from './strategies/vk.strategy';
+export * from './movies-shared/dto/update-country.dto';
+export * from './movies-shared/dto/update-genre.dto';
+export * from './movies-shared/dto/update-movie.dto';
