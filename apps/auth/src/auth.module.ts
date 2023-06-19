@@ -7,11 +7,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AccessTokenStrategy, GoogleStrategy, RefreshTokenStrategy, Role, User, UserRoles, VKStrategy } from '@app/common';
 import { RoleModule } from './roles/role.module';
+import { SwaggerModule } from '@nestjs/swagger';
 
 @Module({
     imports: [
         UserModule,
         RoleModule,
+        SwaggerModule,
         JwtModule.register({}),
         ConfigModule.forRoot({
             isGlobal: true,

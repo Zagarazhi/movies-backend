@@ -5,9 +5,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AccessTokenStrategy, Country, Genre, GoogleStrategy, Movie, MovieCountry, MovieGenre, RefreshTokenStrategy, SimilarMovies, VKStrategy, Video } from '@app/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { SwaggerModule } from '@nestjs/swagger';
 
 @Module({
     imports: [
+        SwaggerModule,
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: '.env',

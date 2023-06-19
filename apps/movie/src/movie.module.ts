@@ -7,9 +7,11 @@ import { Movie, Country, Genre, MovieCountry, MovieGenre, Video, SimilarMovies, 
 import { CountryModule } from './country/country.module';
 import { VideoModule } from './video/video.module'
 import { GenreModule } from './genre/genre.module';
+import { SwaggerModule } from '@nestjs/swagger';
 
 @Module({
     imports: [
+        SwaggerModule,
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: '.env',

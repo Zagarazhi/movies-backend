@@ -1,20 +1,25 @@
-import { IsEnum, IsOptional, IsString } from "class-validator";
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 enum TypesEnum {
-    'POSITIVE', 'NEUTRAL', 'NEGATIVE'
+  POSITIVE = 'POSITIVE',
+  NEUTRAL = 'NEUTRAL',
+  NEGATIVE = 'NEGATIVE',
 }
 
-// DTO-класс для обновления комментария
 export class UpdateCommentDto {
-    @IsOptional()
-    @IsEnum(TypesEnum)
-    readonly type: string;
-    
-    @IsOptional()
-    @IsString()
-    readonly title: string;
-    
-    @IsOptional()
-    @IsString()
-    readonly description: string;
+  @ApiProperty({ enum: TypesEnum, example: 'POSITIVE', description: 'Обновленный тип комментария' })
+  @IsOptional()
+  @IsEnum(TypesEnum)
+  readonly type: string;
+
+  @ApiProperty({ example: 'Классный фильм', description: 'Обновленный заголовок комментария' })
+  @IsOptional()
+  @IsString()
+  readonly title: string;
+
+  @ApiProperty({ example: 'Очень понравился фильм', description: 'Обновленное содержание комментария' })
+  @IsOptional()
+  @IsString()
+  readonly description: string;
 }
