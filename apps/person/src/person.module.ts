@@ -4,9 +4,11 @@ import { PersonService } from './person.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AccessTokenStrategy, GoogleStrategy, Person, RefreshTokenStrategy, RoleInfo, VKStrategy } from '@app/common';
+import { SwaggerModule } from '@nestjs/swagger';
 
 @Module({
     imports: [
+        SwaggerModule,
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: '.env',

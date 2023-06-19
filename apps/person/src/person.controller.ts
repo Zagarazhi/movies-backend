@@ -2,6 +2,7 @@ import { Controller, Get, Param, Query } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { CreatePersonDto, Person } from '@app/common';
+import { ApiTags, ApiOperation, ApiParam, ApiQuery, ApiBearerAuth, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('/persons')
 export class PersonController {
@@ -38,6 +39,11 @@ export class PersonController {
         return persons;
     }
 
+    @ApiOperation({ summary: 'Получить всех персон' })
+    @ApiQuery({ name: 'keywords', type: 'string', required: false })
+    @ApiQuery({ name: 'page', type: 'number', required: false })
+    @ApiQuery({ name: 'limit', type: 'number', required: false })
+    @ApiCreatedResponse({ description: 'Персоны успешно получены' })
     @Get('/all')
     async getAllPersons(
         @Query('keywords') keywords: string,
@@ -50,6 +56,11 @@ export class PersonController {
         return persons;
     }
 
+    @ApiOperation({ summary: 'Получить всех актеров' })
+    @ApiQuery({ name: 'keywords', type: 'string', required: false })
+    @ApiQuery({ name: 'page', type: 'number', required: false })
+    @ApiQuery({ name: 'limit', type: 'number', required: false })
+    @ApiCreatedResponse({ description: 'Актеры успешно получены' })
     @Get('/actors')
     async getAllActors(
         @Query('keywords') keywords: string,
@@ -62,6 +73,11 @@ export class PersonController {
         return persons;
     }
 
+    @ApiOperation({ summary: 'Получить всех режиссеров' })
+    @ApiQuery({ name: 'keywords', type: 'string', required: false })
+    @ApiQuery({ name: 'page', type: 'number', required: false })
+    @ApiQuery({ name: 'limit', type: 'number', required: false })
+    @ApiCreatedResponse({ description: 'Режиссеры успешно получены' })
     @Get('/directors')
     async getAllDirectors(
         @Query('keywords') keywords: string,
@@ -74,6 +90,11 @@ export class PersonController {
         return persons;
     }
 
+    @ApiOperation({ summary: 'Получить весь персонал' })
+    @ApiQuery({ name: 'keywords', type: 'string', required: false })
+    @ApiQuery({ name: 'page', type: 'number', required: false })
+    @ApiQuery({ name: 'limit', type: 'number', required: false })
+    @ApiCreatedResponse({ description: 'Персонал успешно получены' })
     @Get('/staff')
     async getAllStaff(
         @Query('page') page = 1,
@@ -83,6 +104,9 @@ export class PersonController {
         return persons;
     }
 
+    @ApiOperation({ summary: 'Получение персон по ID фильма' })
+    @ApiParam({ name: 'movieId', type: 'number', description: 'ID фильма' })
+    @ApiOkResponse({ description: 'Персоны успешно получены' })
     @Get('/:movieId')
     async getPersonsByMovieId(@Param('movieId') movieId: number): Promise<Person[]> {
         const persons = await this.personService.getPersonsByMovieId(movieId);

@@ -1,9 +1,12 @@
-import { IsString } from "class-validator";
+import { IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
-// DTO-класс для создания ролей
 export class CreateRoleDto {
-    @IsString({message: "Должно быть строкой"})
+    @ApiProperty({ example: 'АДМИН', description: 'Имя роли' })
+    @IsString({ message: 'Должно быть строкой' })
     readonly value: string;
-    @IsString({message: "Должно быть строкой"})
+
+    @ApiProperty({ example: 'Великий и ужасный', description: 'Описание роли' })
+    @IsString({ message: 'Должно быть строкой' })
     readonly description: string;
 }

@@ -4,9 +4,11 @@ import { ParserService } from './parser.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AccessTokenStrategy, GoogleStrategy, RefreshTokenStrategy, VKStrategy } from '@app/common';
+import { SwaggerModule } from '@nestjs/swagger';
 
 @Module({
     imports: [
+        SwaggerModule,
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: '.env',

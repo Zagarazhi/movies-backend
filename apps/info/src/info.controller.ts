@@ -2,17 +2,35 @@ import { Controller, Get, Param, Query } from '@nestjs/common';
 import { InfoService } from './info.service';
 import { Movie, Person } from '@app/common';
 import { Op } from 'sequelize';
+import { ApiOkResponse, ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 @Controller('/info')
 export class InfoController {
     constructor(private readonly infoService: InfoService) {}
 
+    @ApiOperation({ summary: 'Получение ролей по ID персоны' })
+    @ApiOkResponse({ description: 'Роли успешно получены' })
     @Get('/person/:personId')
     async getRolesByPersonId(@Param('personId') personId: number) {
         const person = await this.infoService.getRolesByPersonId(personId);
         return person;
     }
 
+    @ApiOperation({ summary: 'Найти все фильмы с учетом фильтров' })
+    @ApiQuery({ name: 'page', type: Number, required: false, example: 1 })
+    @ApiQuery({ name: 'limit', type: Number, required: false, example: 10 })
+    @ApiQuery({ name: 'order', type: String, required: false, example: 'id-ASC' })
+    @ApiQuery({ name: 'genres', type: String, required: false })
+    @ApiQuery({ name: 'countries', type: String, required: false })
+    @ApiQuery({ name: 'type', type: String, required: false })
+    @ApiQuery({ name: 'minRating', type: Number, required: false })
+    @ApiQuery({ name: 'numRatings', type: Number, required: false })
+    @ApiQuery({ name: 'years', type: String, required: false })
+    @ApiQuery({ name: 'actors', type: String, required: false })
+    @ApiQuery({ name: 'directors', type: String, required: false })
+    @ApiQuery({ name: 'staff', type: String, required: false })
+    @ApiQuery({ name: 'keywords', type: String, required: false })
+    @ApiOkResponse({ description: 'Фильмы успешно получены' })
     @Get()
     async findAll(
         @Query('page') page = 1,

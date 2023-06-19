@@ -3,10 +3,20 @@ import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { MovieModule } from './movie.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
     const app = await NestFactory.create(MovieModule);
     const configService = app.get(ConfigService);
+
+    const options = new DocumentBuilder()
+        .setTitle('Auth API')
+        .setDescription('API документация для сервиса фильмов')
+        .setVersion('1.0')
+        .build();
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup('api', app, document);
+
     app.connectMicroservice<MicroserviceOptions>(
         {
             transport: Transport.TCP,

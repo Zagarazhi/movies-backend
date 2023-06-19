@@ -24,7 +24,15 @@ export class PersonService {
 
     async getAllPersons(page: number, limit: number): Promise<Person[]> {
         const offset = (page - 1) * limit;
-        const persons = await this.personRepository.findAll({offset, limit});
+        const persons = await this.personRepository.findAll({
+            offset,
+            limit,
+            include: [
+                {
+                    model: this.roleInfoRepository,
+                }
+            ]
+        });
         return persons;
     }
 
@@ -38,7 +46,12 @@ export class PersonService {
                     nameRu: {[Op.iLike]: `%${keywords}%`},
                     nameEn: {[Op.iLike]: `%${keywords}%`}
                 }    
-            }
+            },
+            include: [
+                {
+                    model: this.roleInfoRepository,
+                }
+            ]
         });
         return persons;
     }
@@ -137,11 +150,11 @@ export class PersonService {
 
     async getAllActorsByIds(ids: number[]): Promise<Person[]> {
         const actors = await this.personRepository.findAll({
+            where: {id: {[Op.in]: ids}},
             include: [
                 {
                     model: this.roleInfoRepository,
-                    where: {nameEn: 'Actors', id: {[Op.in]: ids}},
-                    attributes: ['movieId'],
+                    where: {nameEn: 'Actors'},
                 }
             ]
         });
@@ -150,10 +163,11 @@ export class PersonService {
 
     async getAllDirectorsByIds(ids: number[]): Promise<Person[]> {
         const directors = await this.personRepository.findAll({
+            where: {id: {[Op.in]: ids}},
             include: [
                 {
                     model: this.roleInfoRepository,
-                    where: {nameEn: 'Directors', id: {[Op.in]: ids}},
+                    where: {nameEn: 'Directors'},
                     attributes: ['movieId'],
                 }
             ]
@@ -163,10 +177,11 @@ export class PersonService {
 
     async getAllStaffByIds(ids: number[]): Promise<Person[]> {
         const stuff = await this.personRepository.findAll({
+            where: {id: {[Op.in]: ids}},
             include: [
                 {
                     model: this.roleInfoRepository,
-                    where: {nameEn: {[Op.notIn]: ['Actors', 'Directors']}, id: {[Op.in]: ids}},
+                    where: {nameEn: {[Op.notIn]: ['Actors', 'Directors']}},
                     attributes: ['movieId'],
                 }
             ]

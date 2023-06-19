@@ -13,6 +13,13 @@
 - Микросервис авторизации: npm run start:dev auth  
 Чтобы остановать:  
 - pm2 stop all  
+Api swagger:  
+- http://localhost:3001/api/ - api микросервиса фильмов
+- http://localhost:3002/api/ - api микросервиса парсера
+- http://localhost:3003/api/ - api микросервиса информации
+- http://localhost:3004/api/ - api микросервиса комментариев
+- http://localhost:3005/api/ - api микросервиса персон
+- http://localhost:3006/api/ - api микросервиса авторизации
 
 # Пути
 ## movie

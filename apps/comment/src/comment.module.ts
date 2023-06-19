@@ -4,9 +4,11 @@ import { CommentService } from './comment.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { AccessTokenStrategy, Comment, GoogleStrategy, RefreshTokenStrategy, VKStrategy } from '@app/common';
+import { SwaggerModule } from '@nestjs/swagger';
 
 @Module({
     imports: [
+        SwaggerModule,
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: '.env',
